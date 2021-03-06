@@ -1,0 +1,11 @@
+# jupyter files
+*ipynb*
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Virtual env
+venv/
+
+# Pycharm files
+.idea/
