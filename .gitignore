@@ -9,3 +9,8 @@ venv/
 
 # Pycharm files
 .idea/
+
+# Image files
+*.jpg
+*.png
+*.pdf
