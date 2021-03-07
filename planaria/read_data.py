@@ -41,7 +41,7 @@ def parse_nodes(nodes_raw: str, nodes_sep: str = '\n', radius_sep: str = '\t'):
         parsed_node = {}
         point, radius = node_rad.split(radius_sep)
         parsed_node["point"] = tuple(map(float, point.split(' ')))
-        parsed_node["radius"] = radius
+        parsed_node["radius"] = float(radius)
         parsed_nodes.append(parsed_node)
     return parsed_nodes
 
