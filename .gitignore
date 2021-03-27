@@ -10,6 +10,9 @@ venv/
 # Pycharm files
 .idea/
 
+# Mac OS files
+.DS_Store
+
 # Image files
 *.jpg
 *.png
