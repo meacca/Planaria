@@ -61,11 +61,24 @@ def parse_file_skeleton(skeleton_raw: str, total_sep: str = "\n\n\n\n"):
     return parsed_polygons, parsed_edges, parsed_nodes
 
 
+def parse_file_extra_skeleton(skeleton_raw: str, total_sep: str = "\n\n\n\n"):
+    parsed = skeleton_raw.split(total_sep)
+    if len(parsed) == 1:
+        return parsed[0].split('\n')[-1], [], []
+    count_terminals_raw, nodes_raw, edges_raw = parsed
+    count_terminals = count_terminals_raw.split('\n')[-1]
+    parsed_nodes = parse_nodes(nodes_raw)
+    parsed_edges = parse_edges(edges_raw)
+    return count_terminals, parsed_nodes, parsed_edges
+
+
 def parse_file(path_to_file: str, diagram_type: str, total_sep: str = "\n\n\n\n"):
-    assert diagram_type in ["voronoi", "skeleton"]
+    assert diagram_type in ["voronoi", "skeleton", "skeleton_way"]
     with open(path_to_file, "r") as f:
         file_raw = f.read()
     if diagram_type == "voronoi":
         return parse_file_voronoi(file_raw, total_sep)
-    else:
+    elif diagram_type == "skeleton":
         return parse_file_skeleton(file_raw, total_sep)
+    else:
+        return parse_file_extra_skeleton(file_raw, total_sep)

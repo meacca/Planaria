@@ -35,6 +35,17 @@ def draw_skeleton(skeleton_path: str, image_size: tuple = (900, 900), draw_circl
     return img
 
 
+def add_extra_edges(cut_skeleton_path: str, extra_skeleton_path: str):
+    img = draw_diagram(cut_skeleton_path, diagram_type="skeleton")
+    count_terminals, parsed_nodes, parsed_edges = parse_file(extra_skeleton_path, diagram_type="skeleton_way")
+    if len(parsed_edges) == 0:
+        return img
+    d = ImageDraw.Draw(img)
+    for edge in parsed_edges:
+        d.line([edge["first_point"], edge["second_point"]], fill=(256, 0, 0))
+    return img
+
+
 def draw_diagram(diagram_path: str, image_size: tuple = (900, 900), diagram_type: str = "voronoi",
                  draw_circles: bool = False):
     assert diagram_type in ["voronoi", "skeleton"]
