@@ -35,6 +35,30 @@ def draw_skeleton(skeleton_path: str, image_size: tuple = (900, 900), draw_circl
     return img
 
 
+def draw_skeleton_way(skeleton_path: str, skeleton_way_path: str,
+                      image_size: tuple = (900, 900), draw_circles: bool = False,
+                      draw_numbers: bool = False):
+    polygons, _, _ = parse_file(skeleton_path, diagram_type="skeleton")
+    img = Image.new("RGB", image_size, (255, 255, 255))
+    d = ImageDraw.Draw(img)
+    for polygon in polygons:
+        d.polygon(polygon, outline=(0, 0, 0))
+
+    _, _, _, skeleton_way = parse_file(skeleton_way_path, diagram_type="skeleton_way")
+    if not skeleton_way:
+        return img
+    for i in range(len(skeleton_way)-1):
+        cur_node, next_node = skeleton_way[i], skeleton_way[i+1]
+        d.line([cur_node["point"], next_node["point"]], fill=(256, 0, 0))
+    if draw_circles:
+        for i, node in enumerate(skeleton_way, 1):
+            bb = calculate_bb(node["point"], node["radius"])
+            d.ellipse(bb, outline=0)
+            if draw_numbers:
+                d.text(node["point"], str(i), (0, 0, 0))
+    return img
+
+
 def add_extra_edges(cut_skeleton_path: str, extra_skeleton_path: str):
     img = draw_diagram(cut_skeleton_path, diagram_type="skeleton")
     count_terminals, parsed_nodes, parsed_edges = parse_file(extra_skeleton_path, diagram_type="skeleton_way")

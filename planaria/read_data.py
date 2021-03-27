@@ -32,7 +32,7 @@ def parse_edges(edges_raw: str, edges_sep: str = '\n', radius_sep: str = '\t'):
 
 def parse_nodes(nodes_raw: str, nodes_sep: str = '\n', radius_sep: str = '\t'):
     nodes = nodes_raw.split(nodes_sep)
-    assert nodes[0] == "NODES"
+    # assert nodes[0] == "NODES"
     nodes = nodes[1:]
     parsed_nodes = []
     for node_rad in nodes:
@@ -64,12 +64,13 @@ def parse_file_skeleton(skeleton_raw: str, total_sep: str = "\n\n\n\n"):
 def parse_file_extra_skeleton(skeleton_raw: str, total_sep: str = "\n\n\n\n"):
     parsed = skeleton_raw.split(total_sep)
     if len(parsed) == 1:
-        return parsed[0].split('\n')[-1], [], []
-    count_terminals_raw, nodes_raw, edges_raw = parsed
-    count_terminals = count_terminals_raw.split('\n')[-1]
+        return int(parsed[0].split('\n')[-1]), [], [], []
+    count_terminals_raw, nodes_raw, edges_raw, skeleton_way_raw = parsed
+    count_terminals = int(count_terminals_raw.split('\n')[-1])
     parsed_nodes = parse_nodes(nodes_raw)
     parsed_edges = parse_edges(edges_raw)
-    return count_terminals, parsed_nodes, parsed_edges
+    skeleton_way = parse_nodes(skeleton_way_raw)
+    return count_terminals, parsed_nodes, parsed_edges, skeleton_way
 
 
 def parse_file(path_to_file: str, diagram_type: str, total_sep: str = "\n\n\n\n"):
