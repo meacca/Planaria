@@ -6,8 +6,12 @@ from PIL import Image, ImageDraw
 
 class SkeletonWay:
     def __init__(self, path_to_skeleton_way: str):
-        _, _, _, self._skeleton_way = parse_file(path_to_skeleton_way, diagram_type="skeleton_way")
-        self.__straight_skeleton_way()
+        self.num_terminals, _, _, self._skeleton_way = parse_file(path_to_skeleton_way, diagram_type="skeleton_way")
+        self.num_terminals = int(self.num_terminals)
+        if len(self._skeleton_way) == 0:
+            self._skeleton_way_straight = None
+        else:
+            self.__straight_skeleton_way()
 
     @staticmethod
     def __compute_line_length(point_1: Tuple[float, float], point_2: Tuple[float, float]):
@@ -39,9 +43,13 @@ class SkeletonWay:
         return img
 
     def calculate_length(self) -> float:
+        if not self._skeleton_way_straight:
+            return float("nan")
         return self._skeleton_way_straight[-1]["point"][0]
 
     def calculate_square(self) -> float:
+        if not self._skeleton_way_straight:
+            return float("nan")
         square = 0
         for i in range(1, len(self._skeleton_way_straight)):
             prev_node, cur_node = self._skeleton_way_straight[i-1], self._skeleton_way_straight[i]
@@ -55,4 +63,14 @@ class SkeletonWay:
         return square
 
     def calculate_mean_radius(self) -> float:
+        if not self._skeleton_way_straight:
+            return float("nan")
         return self.calculate_square() / 2 / self.calculate_length()
+
+    def get_features(self):
+        res = dict()
+        res["num_terminal_nodes"] = self.num_terminals
+        res["skeleton_length"] = self.calculate_length()
+        res["skeleton_square"] = self.calculate_square()
+        res["skeleton_mean_radius"] = self.calculate_mean_radius()
+        return res
