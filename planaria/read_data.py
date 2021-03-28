@@ -64,7 +64,7 @@ def parse_file_skeleton(skeleton_raw: str, total_sep: str = "\n\n\n\n"):
 def parse_file_extra_skeleton(skeleton_raw: str, total_sep: str = "\n\n\n\n"):
     parsed = skeleton_raw.split(total_sep)
     if len(parsed) == 1:
-        return int(parsed[0].split('\n')[-1]), [], [], []
+        return int(parsed[0].split('\n')[1]), [], [], []
     count_terminals_raw, nodes_raw, edges_raw, skeleton_way_raw = parsed
     count_terminals = int(count_terminals_raw.split('\n')[-1])
     parsed_nodes = parse_nodes(nodes_raw)
