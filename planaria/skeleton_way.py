@@ -2,6 +2,7 @@ from planaria.read_data import parse_file
 from planaria.draw_data import calculate_bb
 from typing import Tuple
 from PIL import Image, ImageDraw
+import numpy as np
 
 
 class SkeletonWay:
@@ -67,10 +68,34 @@ class SkeletonWay:
             return float("nan")
         return self.calculate_square() / 2 / self.calculate_length()
 
+    def calculate_max_radius(self) -> float:
+        if not self._skeleton_way_straight:
+            return float("nan")
+        radii = []
+        for node in self._skeleton_way_straight:
+            radii.append(node["radius"])
+        return np.max(radii)
+
+    def calculate_median_radius(self) -> float:
+        if not self._skeleton_way_straight:
+            return float("nan")
+        radii = []
+        for node in self._skeleton_way_straight:
+            radii.append(node["radius"])
+        return np.median(radii)
+
+    def calculate_num_lines(self):
+        if not self._skeleton_way_straight:
+            return float("nan")
+        return len(self._skeleton_way_straight)
+
     def get_features(self):
         res = dict()
         res["num_terminal_nodes"] = self.num_terminals
         res["skeleton_length"] = self.calculate_length()
         res["skeleton_square"] = self.calculate_square()
         res["skeleton_mean_radius"] = self.calculate_mean_radius()
+        res["skeleton_max_radius"] = self.calculate_max_radius()
+        res["skeleton_median_radius"] = self.calculate_median_radius()
+        res["skeleton_num_lines"] = self.calculate_num_lines()
         return res
