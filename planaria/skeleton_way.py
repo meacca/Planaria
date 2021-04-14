@@ -22,7 +22,7 @@ class SkeletonWay:
         cur_x = 0
         self._skeleton_way_straight = [{"point": (0.0, 0.0), "radius": 0.0}]
         for i in range(1, len(self._skeleton_way)):
-            cur_node, prev_node = self._skeleton_way[i], self._skeleton_way[i-1]
+            cur_node, prev_node = self._skeleton_way[i], self._skeleton_way[i - 1]
             edge_length = self.__compute_line_length(cur_node["point"], prev_node["point"])
             cur_x += edge_length
             self._skeleton_way_straight.append({"point": (cur_x, 0.0), "radius": cur_node["radius"]})
@@ -53,7 +53,7 @@ class SkeletonWay:
             return float("nan")
         square = 0
         for i in range(1, len(self._skeleton_way_straight)):
-            prev_node, cur_node = self._skeleton_way_straight[i-1], self._skeleton_way_straight[i]
+            prev_node, cur_node = self._skeleton_way_straight[i - 1], self._skeleton_way_straight[i]
             prev_x, prev_radius = prev_node["point"][0], prev_node["radius"]
             cur_x, cur_radius = cur_node["point"][0], cur_node["radius"]
 

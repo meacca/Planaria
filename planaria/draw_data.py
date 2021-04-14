@@ -47,8 +47,8 @@ def draw_skeleton_way(skeleton_path: str, skeleton_way_path: str,
     _, _, _, skeleton_way = parse_file(skeleton_way_path, diagram_type="skeleton_way")
     if not skeleton_way:
         return img
-    for i in range(len(skeleton_way)-1):
-        cur_node, next_node = skeleton_way[i], skeleton_way[i+1]
+    for i in range(len(skeleton_way) - 1):
+        cur_node, next_node = skeleton_way[i], skeleton_way[i + 1]
         d.line([cur_node["point"], next_node["point"]], fill=(256, 0, 0))
     if draw_circles:
         for i, node in enumerate(skeleton_way, 1):
