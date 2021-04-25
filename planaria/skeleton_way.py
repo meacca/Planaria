@@ -24,6 +24,8 @@ class SkeletonWay:
         for i in range(1, len(self._skeleton_way)):
             cur_node, prev_node = self._skeleton_way[i], self._skeleton_way[i - 1]
             edge_length = self.__compute_line_length(cur_node["point"], prev_node["point"])
+            if edge_length == 0:
+                continue
             cur_x += edge_length
             self._skeleton_way_straight.append({"point": (cur_x, 0.0), "radius": cur_node["radius"]})
 
