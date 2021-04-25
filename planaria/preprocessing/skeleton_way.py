@@ -1,5 +1,5 @@
-from planaria.read_data import parse_file
-from planaria.draw_data import calculate_bb
+from . import parse_file
+from .draw_data import calculate_bb
 from typing import Tuple
 from PIL import Image, ImageDraw
 import numpy as np

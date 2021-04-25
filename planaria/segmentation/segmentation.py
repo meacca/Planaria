@@ -4,7 +4,7 @@ import numpy as np
 from skimage import io, img_as_ubyte
 from skimage import util, color, feature, filters
 from scipy import ndimage as ndi
-from .config import PLANARIA_PHOTO_DIR_PATH, PLANARIA_SEGMENTATION_DIR_PATH
+from planaria.config import PLANARIA_PHOTO_DIR_PATH, PLANARIA_SEGMENTATION_DIR_PATH
 
 
 def find_planaria(image: np.ndarray) -> np.ndarray:

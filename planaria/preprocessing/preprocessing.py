@@ -1,5 +1,5 @@
 import os
-from planaria.skeleton_way import SkeletonWay
+from . import SkeletonWay
 from collections import defaultdict
 import pandas as pd
 
