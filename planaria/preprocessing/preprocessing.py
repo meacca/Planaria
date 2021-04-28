@@ -2,6 +2,7 @@ import os
 from .skeleton_way import SkeletonWay
 from collections import defaultdict
 import pandas as pd
+import math
 
 
 class Preprocesser:
@@ -61,6 +62,13 @@ class ShapePreprocesser(Preprocesser):
     def __init__(self, skeleton_dir: str, skeleton_way_ending: str = "_skeleton_extra.txt"):
         super().__init__(skeleton_dir, skeleton_way_ending)
 
-    def preprocess_all(self):
+    def preprocess_all(self, len_threshold: int = 900):
         skeletons_all, class_labels_all, sample_names_all = self.read_skeletons_all()
-        return skeletons_all, class_labels_all, sample_names_all
+        skeletons_res, class_labels_res, sample_names_res = [], [], []
+        for skeleton, class_label, name in zip(skeletons_all, class_labels_all, sample_names_all):
+            skeleton_len = skeleton.calculate_length()
+            if (not math.isnan(skeleton_len)) and (skeleton_len < len_threshold):
+                skeletons_res.append(skeleton)
+                class_labels_res.append(class_label)
+                sample_names_res.append(name)
+        return skeletons_res, class_labels_res, sample_names_res
