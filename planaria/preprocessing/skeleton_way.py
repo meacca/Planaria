@@ -101,3 +101,6 @@ class SkeletonWay:
         res["skeleton_median_radius"] = self.calculate_median_radius()
         res["skeleton_num_lines"] = self.calculate_num_lines()
         return res
+
+    def get_straight_skeleton(self):
+        return self._skeleton_way_straight
