@@ -1,7 +1,3 @@
-import os
-from . import SkeletonWay
-
-
 def parse_polygons(polygons_raw: str, point_sep: str = "\n", polygon_sep: str = "\n\n"):
     polygons = polygons_raw.split(polygon_sep)
     assert polygons[0] == "POLYGONS"
@@ -87,30 +83,3 @@ def parse_file(path_to_file: str, diagram_type: str, total_sep: str = "\n\n\n\n"
         return parse_file_skeleton(file_raw, total_sep)
     else:
         return parse_file_extra_skeleton(file_raw, total_sep)
-
-
-def read_skeletons_dir(dir_name, skeleton_way_ending="_skeleton_extra.txt"):
-    class_label = int(dir_name.split(' ')[-1])
-    skeletons_dir = []
-    skeleton_files = os.listdir(dir_name)
-    skeleton_files = [os.path.join(dir_name, x) for x in skeleton_files
-                      if x.endswith(skeleton_way_ending)]
-    for skeleton_file in skeleton_files:
-        skeleton_way = SkeletonWay(skeleton_file)
-        skeletons_dir.append(skeleton_way)
-    class_labels_dir = [class_label] * len(skeletons_dir)
-    return skeletons_dir, class_labels_dir
-
-
-def read_skeletons_all(total_dir_name, skeleton_way_ending="_skeleton_extra.txt"):
-    skeletons_all = []
-    class_labels_all = []
-    for directory in os.listdir(total_dir_name):
-        planaria_directory = os.path.join(total_dir_name, directory)
-        if not os.path.isdir(planaria_directory):
-            continue
-        skeletons_dir, class_labels_dir = read_skeletons_dir(planaria_directory,
-                                                             skeleton_way_ending=skeleton_way_ending)
-        skeletons_all.extend(skeletons_dir)
-        class_labels_all.extend(class_labels_dir)
-    return skeletons_all, class_labels_all

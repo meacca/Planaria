@@ -1,4 +1,4 @@
-from . import parse_file
+from .read_data import parse_file
 from .draw_data import calculate_bb
 from typing import Tuple
 from PIL import Image, ImageDraw
