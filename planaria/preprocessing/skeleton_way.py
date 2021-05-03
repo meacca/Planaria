@@ -29,6 +29,24 @@ class SkeletonWay:
             cur_x += edge_length
             self._skeleton_way_straight.append({"point": (cur_x, 0.0), "radius": cur_node["radius"]})
 
+    def __reverse_straight_skeleton_way(self):
+        res = []
+        length = self._skeleton_way_straight[-1]["point"][0]
+        for node in self._skeleton_way_straight[::-1]:
+            new_node = dict()
+            new_node["point"] = (length - node["point"][0], 0)
+            new_node["radius"] = node["radius"]
+            res.append(new_node)
+        self._skeleton_way_straight = res
+
+    def fix_head_tail_skeleton_way(self):
+        if self._skeleton_way_straight is None:
+            return
+        start_rad = self._skeleton_way_straight[1]["radius"]
+        end_rad = self._skeleton_way_straight[-2]["radius"]
+        if start_rad < end_rad:
+            self.__reverse_straight_skeleton_way()
+
     def draw_straight_skeleton_way(self, image_size: Tuple[int, int] = (900, 900),
                                    draw_circles: bool = True) -> Image:
         img = Image.new("RGB", image_size, (255, 255, 255))
