@@ -30,6 +30,22 @@ def parse_edges(edges_raw: str, edges_sep: str = '\n', radius_sep: str = '\t'):
     return parsed_edges
 
 
+def parse_structure_edges(edges_raw: str, edges_sep: str = '\n'):
+    edges = edges_raw.split(edges_sep)
+    assert edges[0] == "EDGES"
+    edges = edges[1:]
+    parsed_edges = []
+    for edge in edges:
+        if edge == "":
+            continue
+        parsed_edge = dict()
+        first_node, second_node = edge.split(' ')
+        parsed_edge["first_node"] = int(first_node)
+        parsed_edge["second_node"] = int(second_node)
+        parsed_edges.append(parsed_edge)
+    return parsed_edges
+
+
 def parse_nodes(nodes_raw: str, nodes_sep: str = '\n', radius_sep: str = '\t'):
     nodes = nodes_raw.split(nodes_sep)
     # assert nodes[0] == "NODES"
@@ -40,6 +56,22 @@ def parse_nodes(nodes_raw: str, nodes_sep: str = '\n', radius_sep: str = '\t'):
             continue
         parsed_node = {}
         point, radius = node_rad.split(radius_sep)
+        parsed_node["point"] = tuple(map(float, point.split(' ')))
+        parsed_node["radius"] = float(radius)
+        parsed_nodes.append(parsed_node)
+    return parsed_nodes
+
+
+def parse_structure_nodes(nodes_raw: str, nodes_sep: str = '\n', radius_sep: str = '\t'):
+    nodes = nodes_raw.split(nodes_sep)
+    nodes = nodes[1:]
+    parsed_nodes = []
+    for node_rad in nodes:
+        if node_rad == "":
+            continue
+        parsed_node = {}
+        node_id, point, radius = node_rad.split(radius_sep)
+        parsed_node["id"] = int(node_id)
         parsed_node["point"] = tuple(map(float, point.split(' ')))
         parsed_node["radius"] = float(radius)
         parsed_nodes.append(parsed_node)
@@ -61,6 +93,14 @@ def parse_file_skeleton(skeleton_raw: str, total_sep: str = "\n\n\n\n"):
     return parsed_polygons, parsed_edges, parsed_nodes
 
 
+def parse_file_skeleton_structure(skeleton_raw: str, total_sep: str = "\n\n\n\n"):
+    polygons_raw, edges_raw, nodes_raw = skeleton_raw.split(total_sep)
+    parsed_polygons = parse_polygons(polygons_raw)
+    parsed_edges = parse_structure_edges(edges_raw)
+    parsed_nodes = parse_structure_nodes(nodes_raw)
+    return parsed_polygons, parsed_edges, parsed_nodes
+
+
 def parse_file_extra_skeleton(skeleton_raw: str, total_sep: str = "\n\n\n\n"):
     parsed = skeleton_raw.split(total_sep)
     if len(parsed) == 1:
@@ -74,12 +114,14 @@ def parse_file_extra_skeleton(skeleton_raw: str, total_sep: str = "\n\n\n\n"):
 
 
 def parse_file(path_to_file: str, diagram_type: str, total_sep: str = "\n\n\n\n"):
-    assert diagram_type in ["voronoi", "skeleton", "skeleton_way"]
+    assert diagram_type in ["voronoi", "skeleton", "skeleton_structure", "skeleton_way"]
     with open(path_to_file, "r") as f:
         file_raw = f.read()
     if diagram_type == "voronoi":
         return parse_file_voronoi(file_raw, total_sep)
     elif diagram_type == "skeleton":
         return parse_file_skeleton(file_raw, total_sep)
+    elif diagram_type == "skeleton_structure":
+        return parse_file_skeleton_structure(file_raw, total_sep)
     else:
         return parse_file_extra_skeleton(file_raw, total_sep)
